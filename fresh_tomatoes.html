@@ -1,11 +1,4 @@
-import webbrowser
-import os
-import re
 
-
-# Styles and scripting for the page
-# (changed the top margin of the modal to accommodate for the movie storyline and added select2 for the movie-genre-select)
-main_page_head = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,12 +54,7 @@ main_page_head = '''
         }
     </style>
 </head>
-'''
 
-
-# The main page layout and title bar
-# (added a select dropdown to show only the selected genre)
-main_page_content = '''
   <body>
     <!-- Main Page Content -->
     <div class="container">
@@ -85,7 +73,25 @@ main_page_content = '''
           <select class="genres-droplist" multiple="multiple" style="width:75%"></select>
         </div>
       </div>
-      <div class="row">{movie_tiles}</div>
+      <div class="row">
+        <div class="col-md-6 col-lg-4 movie-tile text-center All SciFiThriller" data-trailer-youtube-id="HHcHYisZFLU" data-movie-storyline="The discovery of a clue to mankind's origins on Earth leads a team of explorers to the darkest parts of the universe. Two brilliant young scientists lead the expedition. Shaw (Noomi Rapace) hopes that they will meet a race of benevolent, godlike beings who will in some way verify her religious beliefs, while Holloway (Logan Marshall-Green) is out to debunk any spiritual notions. However, neither the scientists nor their shipmates are prepared for the unimaginable terrors that await them." data-toggle="modal" data-target="#trailer">
+            <img src="http://www.gstatic.com/tv/thumb/movieposters/8815605/p8815605_p_v7_ad.jpg" width="220" height="342">
+            <h2>Prometheus</h2>
+            <span class="label label-primary" data-genre="SciFi Thriller" data-tag="SciFiThriller">SciFi Thriller</span>
+        </div>
+
+        <div class="col-md-6 col-lg-4 movie-tile text-center All SciFi" data-trailer-youtube-id="0vxOhd4qlnA" data-movie-storyline="In Earth's future, a global crop blight and second Dust Bowl are slowly rendering the planet uninhabitable. Professor Brand (Michael Caine), a brilliant NASA physicist, is working on plans to save mankind by transporting Earth's population to a new home via a wormhole. But first, Brand must send former NASA pilot Cooper (Matthew McConaughey) and a team of researchers through the wormhole and across the galaxy to find out which of three planets could be mankind's new home." data-toggle="modal" data-target="#trailer">
+            <img src="http://meetinthelobby.com/wp-content/uploads/2014/11/Interstellar-Teaser-Movie-Poster-Large.jpg" width="220" height="342">
+            <h2>Interstellar</h2>
+            <span class="label label-primary" data-genre="SciFi" data-tag="SciFi">SciFi</span>
+        </div>
+
+        <div class="col-md-6 col-lg-4 movie-tile text-center All SciFi" data-trailer-youtube-id="ej3ioOneTy8" data-movie-storyline="When astronauts blast off from the planet Mars, they leave behind Mark Watney (Matt Damon), presumed dead after a fierce storm. With only a meager amount of supplies, the stranded visitor must utilize his wits and spirit to find a way to survive on the hostile planet. Meanwhile, back on Earth, members of NASA and a team of international scientists work tirelessly to bring him home, while his crew mates hatch their own plan for a daring rescue mission." data-toggle="modal" data-target="#trailer">
+            <img src="http://t2.gstatic.com/images?q=tbn:ANd9GcTkKPZ7EIOafEsemyn6zTIDeGYthKC_Okgxi1eX6diuOT3xKWXQ" width="220" height="342">
+            <h2>The Martian</h2>
+            <span class="label label-primary" data-genre="SciFi" data-tag="SciFi">SciFi</span>
+        </div>
+</div>
     </div>
 
     <!-- Modals Data -->
@@ -103,25 +109,7 @@ main_page_content = '''
       </div>
     </div>
 
-    {js_script}
-
-  </body>
-</html>
-'''
-
-# A single movie entry html template
-# (v2.0 should improve the long storyline and re-do the webpage generation)
-movie_tile_content = '''
-        <div class="col-md-6 col-lg-4 movie-tile text-center All {movie_tag}" data-trailer-youtube-id="{trailer_youtube_id}" data-movie-storyline="{movie_storyline}" data-toggle="modal" data-target="#trailer">
-            <img src="{poster_image_url}" width="220" height="342">
-            <h2>{movie_title}</h2>
-            <span class="label label-primary" data-genre="{movie_genre}" data-tag="{movie_tag}">{movie_genre}</span>
-        </div>
-'''
-
-# JS script variable to append it at the end, so we can generate a droplist from the pre-rendered labels
-# (although that is already solved with the 'document.ready' function, I'm just used to put my scripts at the end...)
-script = '''
+    
     <script type="text/javascript" charset="utf-8">
         // Pause the video when the modal is closed
         $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
@@ -179,48 +167,7 @@ script = '''
           
         });
     </script>
-'''
 
 
-def create_movie_tiles_content(movies):
-    # The HTML content for this section of the page
-    content = ''
-    for movie in movies:
-        # Extract the youtube ID from the url
-        youtube_id_match = re.search(
-            r'(?<=v=)[^&#]+', movie.trailer_youtube_url)
-        youtube_id_match = youtube_id_match or re.search(
-            r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
-        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
-                              else None)
-
-        # Append the tile for the movie with its content filled in
-        # (added some more info to improve the modal and the front page as well)
-        content += movie_tile_content.format(
-            movie_title=movie.title,
-            movie_storyline=movie.storyline,
-            movie_tag=movie.tag,
-            movie_genre=movie.genre,
-            poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id
-        )
-    return content
-
-def open_movies_page(movies):
-    # Create or overwrite the output file
-    output_file = open('fresh_tomatoes.html', 'w')
-
-    # Replace the movie tiles placeholder generated content
-    # (here we could add some more content generation by adding a modal generator,
-    # thus, changing the js that loads every modal must be done)
-    rendered_content = main_page_content.format(
-        movie_tiles=create_movie_tiles_content(movies),
-        js_script=script)
-
-    # Output the file
-    output_file.write(main_page_head + rendered_content)
-    output_file.close()
-
-    # open the output file in the browser (in a new tab, if possible)
-    url = os.path.abspath(output_file.name)
-    webbrowser.open('file://' + url, new=2)
+  </body>
+</html>
