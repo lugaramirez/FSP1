@@ -1,6 +1,14 @@
 import fresh_tomatoes
 import media
 
+# Template for entry creation
+# ---------------------------
+# variable_name = media.Movie("Title",
+# 	"Genre",
+# 	"Storyline",
+# 	"Poster image URL",
+# 	"Youtube trailer URL")
+
 interstellar = media.Movie("Interstellar",
 	"SciFi",
 	"In Earth's future, a global crop blight and second Dust Bowl are slowly rendering the planet uninhabitable. Professor Brand (Michael Caine), a brilliant NASA physicist, is working on plans to save mankind by transporting Earth's population to a new home via a wormhole. But first, Brand must send former NASA pilot Cooper (Matthew McConaughey) and a team of researchers through the wormhole and across the galaxy to find out which of three planets could be mankind's new home.",
@@ -19,5 +27,8 @@ martian = media.Movie("The Martian",
 	"http://t2.gstatic.com/images?q=tbn:ANd9GcTkKPZ7EIOafEsemyn6zTIDeGYthKC_Okgxi1eX6diuOT3xKWXQ",
 	"https://www.youtube.com/watch?v=ej3ioOneTy8")
 
+# remember to include your new entry in this list!
 movies = [prometheus, interstellar, martian]
+
+#renders the html code
 fresh_tomatoes.open_movies_page(movies)
