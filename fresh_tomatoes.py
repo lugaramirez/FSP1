@@ -2,9 +2,9 @@ import webbrowser
 import os
 import re
 
-
 # Styles and scripting for the page
-# (changed the top margin of the modal to accommodate for the movie storyline and added select2 for the movie-genre-select)
+# (changed the top margin of the modal to accommodate for the movie storyline
+# and added select2 for the movie-genre-select)
 main_page_head = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -110,7 +110,8 @@ main_page_content = '''
 '''
 
 # A single movie entry html template
-# (v2.0 should improve the long storyline and re-do the webpage generation)
+# (v2.0 should improve the long storyline and re-do the webpage
+# generation)
 movie_tile_content = '''
         <div class="col-md-6 col-lg-4 movie-tile text-center All {movie_tag}" data-trailer-youtube-id="{trailer_youtube_id}" data-movie-storyline="{movie_storyline}" data-toggle="modal" data-target="#trailer">
             <img src="{poster_image_url}" width="220" height="342">
@@ -119,8 +120,10 @@ movie_tile_content = '''
         </div>
 '''
 
-# JS script variable to append it at the end, so we can generate a droplist from the pre-rendered labels
-# (although that is already solved with the 'document.ready' function, I'm just used to put my scripts at the end...)
+# JS script variable to append it at the end, so we can generate
+# a droplist from the pre-rendered labels
+# (although that is already solved with the 'document.ready' function, 
+# I'm just used to put my scripts at the end...)
 script = '''
     <script type="text/javascript" charset="utf-8">
         // Pause the video when the modal is closed
@@ -195,7 +198,8 @@ def create_movie_tiles_content(movies):
                               else None)
 
         # Append the tile for the movie with its content filled in
-        # (added some more info to improve the modal and the front page as well)
+        # (added some more info to improve the modal and the front 
+        # page as well)
         content += movie_tile_content.format(
             movie_title=movie.title,
             movie_storyline=movie.storyline,
@@ -211,7 +215,7 @@ def open_movies_page(movies):
     output_file = open('fresh_tomatoes.html', 'w')
 
     # Replace the movie tiles placeholder generated content
-    # (here we could add some more content generation by adding a modal generator,
+    # (here we could add some more content by adding a modal generator,
     # thus, changing the js that loads every modal must be done)
     rendered_content = main_page_content.format(
         movie_tiles=create_movie_tiles_content(movies),

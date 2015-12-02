@@ -8,11 +8,12 @@ In order to modify the content of the generated html code, you should add each e
  Template for entry creation
  ---------------------------
  ```
- variable_name = media.Movie("Title",
- 	"Genre",
- 	"Storyline",
- 	"Poster image URL",
- 	"Youtube trailer URL")
+ variable_name = media.Movie(
+    "Title",
+    "Genre",
+    "Storyline",
+    "Poster image URL",
+    "Youtube trailer URL")
 ```
 
 And then, in order for it to appear on the generated page, you should add this new entry (in the example "variable_name"), to the "movies" array (found at the second to last line in the file).
